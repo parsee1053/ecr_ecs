@@ -1,7 +1,6 @@
 version: 2.1
 orbs:
   aws-ecr: circleci/aws-ecr@6.10.0
-  aws-ecs: circleci/aws-ecs@1.2.0
 workflows:
   build-and-deploy:
     jobs:
@@ -9,37 +8,3 @@ workflows:
           account-url: AWS_ECR_ACCOUNT_URL
           repo: 'nginx'
           tag: '${CIRCLE_SHA1}'
-
-      ### ECSへデプロイするジョブ
-      #- aws-ecs/deploy-service-update:
-      #    requires:
-      #      - aws-ecr/build-and-push-image
-      #    family: 'circleci-book-task'
-      #    service-name: 'circleci-book-service'
-      #    cluster-name: 'circleci-book-cluster'
-      #    container-image-name-updates: 'container=circleci-book-container,image-and-tag=${AWS_ECR_ACCOUNT_URL}/nginx:${CIRCLE_SHA1}'
-
-### E2Eテストの例
-#version: 2
-#jobs:
-#  run_e2e_test:
-#    docker:
-#      - image: circleci/ruby:2.6.5
-#    working_directory: ~/project
-#    steps:
-#      - checkout
-#      - run: bundle install
-#      - run: bundle exec ruby e2e.rb "https://google.com"
-#
-#workflows:
-#  version: 2
-#  monitoring:
-#    triggers:
-#      - schedule:
-#          cron: "* * * * *"
-#          filters:
-#            branches:
-#              only:
-#                - master
-#    jobs:
-#      - run_e2e_test
